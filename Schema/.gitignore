@@ -1,0 +1,9 @@
+archive/
+node_modules/
+coverage/
+dist/
+*.log
+output.json
+.DS_Store
+.env
+.env.*

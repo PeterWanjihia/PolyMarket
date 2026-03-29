@@ -8,19 +8,24 @@ async function runTest() {
   const runId = "archive-test-001";
 
   const jobs = planRequest(baselineMarketsProfile, runId);
-  const firstJob = jobs[0];
-  const result = await executeJob(firstJob);
-  const provenance = buildProvenance(firstJob, result);
 
-  const record = {
-    provenance,
-    payload: result.data
-  };
+  const writeResults = [];
 
-  const writeResult = await writeRawArchiveRecord(record);
+  for (const job of jobs) {
+    const result = await executeJob(job);
+    const provenance = buildProvenance(job, result);
 
-  console.log("ARCHIVE WRITE RESULT:");
-  console.log(JSON.stringify(writeResult, null, 2));
+    const record = {
+      provenance,
+      payload: result.data
+    };
+
+    const writeResult = await writeRawArchiveRecord(record);
+    writeResults.push(writeResult);
+  }
+
+  console.log("ARCHIVE WRITE RESULTS:");
+  console.log(JSON.stringify(writeResults, null, 2));
 }
 
 runTest();
