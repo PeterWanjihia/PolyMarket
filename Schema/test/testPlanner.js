@@ -1,6 +1,6 @@
 
-import { baselineMarketsProfile } from './queryProfile.js';
-import { planRequest } from './requestPlanner.js';
+import { baselineMarketsProfile } from '../queryProfile.js';
+import { planRequest } from '../requestPlanner.js';
 
 function runTest() {
   console.log("Initializing Test: Baseline Markets Profile...\n");

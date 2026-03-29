@@ -36,3 +36,27 @@ export function planRequest(profile, runId = Date.now()) {
 
   return jobs; 
 }
+
+export function buildPageProbeJob(profile, runId, pageNumber, pageSize) {
+  const profileId = profile.id;
+  const endpoint = profile.endpoint;
+  const baseParams = profile.baseParams;
+
+  const offset = (pageNumber - 1) * pageSize;
+
+  const params = {
+    ...baseParams,
+    limit: pageSize,
+    offset: offset
+  };
+
+  return {
+    jobId: `${profileId}-run-${runId}-page-${pageNumber}`,
+    profileId: profileId,
+    endpoint: endpoint,
+    mode: profile.mode,
+    pageNumber: pageNumber,
+    params: params,
+    provenanceTags: profile.provenanceTags
+  };
+}

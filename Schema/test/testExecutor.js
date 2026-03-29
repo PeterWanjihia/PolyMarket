@@ -1,6 +1,6 @@
-import { baselineMarketsProfile } from "./queryProfile.js";
-import { planRequest } from "./requestPlanner.js";
-import { executeJob } from "./httpExecutor.js";
+import { baselineMarketsProfile } from "../queryProfile.js";
+import { planRequest } from "../requestPlanner.js";
+import { executeJob } from "../httpExecutor.js";
 
 async function runTest() {
   const testRunId = "test-execution-001";
