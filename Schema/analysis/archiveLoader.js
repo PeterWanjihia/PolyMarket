@@ -1,5 +1,22 @@
+// analysis/archiveLoader.js
+
 import fs from "fs/promises";
 import path from "path";
+
+function isNonNullObject(value) {
+  return typeof value === "object" && value !== null;
+}
+
+function isArchiveCrawlRecord(value) {
+  if (!isNonNullObject(value)) {
+    return false;
+  }
+
+  return (
+    Object.prototype.hasOwnProperty.call(value, "provenance") &&
+    Object.prototype.hasOwnProperty.call(value, "payload")
+  );
+}
 
 export async function loadArchiveRun(archiveDir) {
   const entryNames = await fs.readdir(archiveDir);
@@ -14,21 +31,43 @@ export async function loadArchiveRun(archiveDir) {
   for (const fileName of jsonFileNames) {
     const filePath = path.join(archiveDir, fileName);
 
+    let rawText;
     try {
-      const rawText = await fs.readFile(filePath, "utf8");
-      const parsedRecord = JSON.parse(rawText);
-
-      records.push({
-        sourceFile: fileName,
-        record: parsedRecord,
-      });
+      rawText = await fs.readFile(filePath, "utf8");
     } catch (error) {
       failures.push({
         sourceFile: fileName,
-        stage: "read-or-parse",
+        stage: "read",
         error: error.message,
       });
+      continue;
     }
+
+    let parsedRecord;
+    try {
+      parsedRecord = JSON.parse(rawText);
+    } catch (error) {
+      failures.push({
+        sourceFile: fileName,
+        stage: "parse",
+        error: error.message,
+      });
+      continue;
+    }
+
+    if (!isArchiveCrawlRecord(parsedRecord)) {
+      failures.push({
+        sourceFile: fileName,
+        stage: "validate-record-shape",
+        error: 'Parsed JSON is not a valid archive crawl record. Expected top-level "provenance" and "payload" properties.',
+      });
+      continue;
+    }
+
+    records.push({
+      sourceFile: fileName,
+      record: parsedRecord,
+    });
   }
 
   return {
