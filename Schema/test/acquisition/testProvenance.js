@@ -1,7 +1,7 @@
-import { baselineMarketsProfile } from "../queryProfile.js";
-import { planRequest } from "../requestPlanner.js";
-import { executeJob } from "../httpExecutor.js";
-import { buildProvenance } from "../provenance.js";
+import { baselineMarketsProfile } from "../../acquisition/queryProfile.js";
+import { planRequest } from "../../acquisition/requestPlanner.js";
+import { executeJob } from "../../acquisition/httpExecutor.js";
+import { buildProvenance } from "../../acquisition/provenance.js";
 
 async function runTest() {
   const runId = "provenance-test-001";

@@ -1,7 +1,11 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-export async function writeRawArchiveRecord(record, baseDir = "archive/raw") {
+const moduleDir = path.dirname(fileURLToPath(import.meta.url));
+const defaultArchiveDir = path.join(moduleDir, "archive/raw");
+
+export async function writeRawArchiveRecord(record, baseDir = defaultArchiveDir) {
   const runId = record.provenance.runId;
   const jobId = record.provenance.jobId;
 

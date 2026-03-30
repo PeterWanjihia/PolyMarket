@@ -1,5 +1,5 @@
-import { baselineMarketsProfile } from "./queryProfile.js";
-import { probeCardinality } from "./cardinalityProber.js";
+import { baselineMarketsProfile } from "../../acquisition/queryProfile.js";
+import { probeCardinality } from "../../analysis/cardinalityProber.js";
 
 async function runTest() {
   const runId = "cardinality-probe-001";

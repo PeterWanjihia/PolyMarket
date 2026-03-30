@@ -1,4 +1,5 @@
 archive/
+acquisition/archive/
 node_modules/
 coverage/
 dist/

@@ -1,5 +1,5 @@
-import { baselineMarketsProfile } from "./queryProfile.js";
-import { runCrawl } from "./crawlOrchestrator.js";
+import { baselineMarketsProfile } from "../../acquisition/queryProfile.js";
+import { runCrawl } from "../../acquisition/crawlOrchestrator.js";
 
 async function runTest() {
   const testRunId = "crawl-run-001";

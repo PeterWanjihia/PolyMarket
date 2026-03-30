@@ -1,5 +1,5 @@
-import { buildPageProbeJob } from "./requestPlanner.js";
-import { executeJob } from "./httpExecutor.js";
+import { buildPageProbeJob } from "../acquisition/requestPlanner.js";
+import { executeJob } from "../acquisition/httpExecutor.js";
 
 async function probeSinglePage(profile, runId, pageNumber, pageSize) {
   const job = buildPageProbeJob(profile, runId, pageNumber, pageSize);
