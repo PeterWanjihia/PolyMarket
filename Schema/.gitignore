@@ -8,3 +8,4 @@ output.json
 .DS_Store
 .env
 .env.*
+buildercodes.txt
