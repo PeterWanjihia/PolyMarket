@@ -39,10 +39,10 @@ async function main() {
     )
   );
 
-  console.log("\nFIRST 20 OBSERVATIONS");
+  console.log("\nALL OBSERVATIONS");
   console.log(
     JSON.stringify(
-      singleResult.observations.slice(0, 20).map((obs) => ({
+      singleResult.observations.map((obs) => ({
         path: obs.path,
         nodeKind: obs.nodeKind,
       })),
