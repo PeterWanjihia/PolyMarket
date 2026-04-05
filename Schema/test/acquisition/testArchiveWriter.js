@@ -3,9 +3,16 @@ import { planRequest } from "../../acquisition/requestPlanner.js";
 import { executeJob } from "../../acquisition/httpExecutor.js";
 import { buildProvenance } from "../../acquisition/provenance.js";
 import { writeRawArchiveRecord } from "../../acquisition/rawArchiveWriter.js";
+import { rm } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 async function runTest() {
   const runId = "archive-test-001";
+  const moduleDir = path.dirname(fileURLToPath(import.meta.url));
+  const runDir = path.resolve(moduleDir, "../../acquisition/archive/raw", runId);
+
+  await rm(runDir, { recursive: true, force: true });
 
   const jobs = planRequest(baselineMarketsProfile, runId);
 

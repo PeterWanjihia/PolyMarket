@@ -9,8 +9,8 @@ export const baselineMarketsProfile = {
 
   pagination: {
     strategy: "offset",
-    pageSize: 50,
-    initialPages: 100
+    pageSize: 25,
+    initialPages: 5
   },
 
   enabled: true,
