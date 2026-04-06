@@ -1,34 +1,6 @@
 // analysis/typeInference/detectors/array/detectHomogeneousArray.js
 
-function getRawKind(value) {
-  if (value === null) {
-    return "null";
-  }
-
-  if (Array.isArray(value)) {
-    return "array";
-  }
-
-  const valueType = typeof value;
-
-  if (valueType === "object") {
-    return "object";
-  }
-
-  if (valueType === "string") {
-    return "string";
-  }
-
-  if (valueType === "number") {
-    return "number";
-  }
-
-  if (valueType === "boolean") {
-    return "boolean";
-  }
-
-  return "unknown";
-}
+import { classifyRawKind } from "../../utils/classifyRawKind.js";
 
 export function detectHomogeneousArray(context) {
   const arrayObservations = context.observationsByRawKind.array;
@@ -49,7 +21,7 @@ export function detectHomogeneousArray(context) {
 
   for (const observation of arrayObservations) {
     const value = observation.value;
-    const elementKinds = new Set(value.map((item) => getRawKind(item)));
+    const elementKinds = new Set(value.map((item) => classifyRawKind(item)));
 
     if (elementKinds.size <= 1) {
       homogeneousCount += 1;

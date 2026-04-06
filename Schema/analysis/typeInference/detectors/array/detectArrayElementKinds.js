@@ -1,34 +1,6 @@
 // analysis/typeInference/detectors/array/detectArrayElementKinds.js
 
-function getRawKind(value) {
-  if (value === null) {
-    return "null";
-  }
-
-  if (Array.isArray(value)) {
-    return "array";
-  }
-
-  const valueType = typeof value;
-
-  if (valueType === "object") {
-    return "object";
-  }
-
-  if (valueType === "string") {
-    return "string";
-  }
-
-  if (valueType === "number") {
-    return "number";
-  }
-
-  if (valueType === "boolean") {
-    return "boolean";
-  }
-
-  return "unknown";
-}
+import { classifyRawKind } from "../../utils/classifyRawKind.js";
 
 function subtypeForElementKind(elementKind) {
   if (elementKind === "string") {
@@ -68,7 +40,7 @@ export function detectArrayElementKinds(context) {
 
   for (const observation of arrayObservations) {
     for (const item of observation.value) {
-      const kind = getRawKind(item);
+      const kind = classifyRawKind(item);
       elementKindCounts.set(kind, (elementKindCounts.get(kind) ?? 0) + 1);
       elementCount += 1;
     }

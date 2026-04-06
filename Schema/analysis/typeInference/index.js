@@ -14,3 +14,7 @@ export {
 
 export { inferPathType } from "./inferPathType.js";
 export { inferPathTypes } from "./inferPathTypes.js";
+
+export { classifyRawKind } from "./utils/classifyRawKind.js";
+export { isNumericString } from "./utils/isNumericString.js";
+export { safeJsonParse } from "./utils/safeJsonParse.js";
