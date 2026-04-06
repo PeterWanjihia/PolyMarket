@@ -23,14 +23,17 @@ export function bundlePathObservations(extractionResult) {
     extractionResult.observations,
     extractionResult.marketUnitCount
   );
+  const failures = Array.isArray(extractionResult.failures)
+    ? extractionResult.failures
+    : [];
 
   return {
     ok: Boolean(extractionResult.ok) && profileResult.ok,
     marketUnitCount: extractionResult.marketUnitCount,
+    observationCount: extractionResult.observationCount,
     pathCount: profileResult.pathCount,
+    failedCount: failures.length,
     pathBundles: profileResult.profiles,
-    failures: Array.isArray(extractionResult.failures)
-      ? extractionResult.failures
-      : [],
+    failures,
   };
 }

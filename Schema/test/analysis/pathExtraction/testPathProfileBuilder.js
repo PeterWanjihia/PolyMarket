@@ -44,7 +44,9 @@ async function main() {
       {
         ok: bundleResult.ok,
         marketUnitCount: bundleResult.marketUnitCount,
+        observationCount: bundleResult.observationCount,
         pathCount: bundleResult.pathCount,
+        failedCount: bundleResult.failedCount,
       },
       null,
       2

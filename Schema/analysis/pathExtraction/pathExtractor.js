@@ -3,6 +3,34 @@
 import { getNodeKind } from "./nodeKind.js";
 import { ROOT_PATH, joinObjectPath, joinArrayItemPath } from "./pathUtils.js";
 
+function getRawKind(value) {
+  if (value === null) {
+    return "null";
+  }
+
+  if (Array.isArray(value)) {
+    return "array";
+  }
+
+  if (typeof value === "object") {
+    return "object";
+  }
+
+  if (typeof value === "string") {
+    return "string";
+  }
+
+  if (typeof value === "number") {
+    return "number";
+  }
+
+  if (typeof value === "boolean") {
+    return "boolean";
+  }
+
+  return "unknown";
+}
+
 function isMarketUnit(value) {
   if (typeof value !== "object" || value === null) {
     return false;
@@ -16,19 +44,27 @@ function isMarketUnit(value) {
   );
 }
 
-function buildObservation(marketUnit, path, value) {
+function buildObservation(marketUnit, path, value, observationOrder) {
   return {
     sourceFile: marketUnit.sourceFile,
     provenance: marketUnit.provenance,
     marketIndex: marketUnit.marketIndex,
+    marketUnitId: `${marketUnit.sourceFile}::${marketUnit.marketIndex}`,
     path,
     nodeKind: getNodeKind(value),
+    rawKind: getRawKind(value),
+    observationOrder,
     value,
   };
 }
 
-function walkNode(value, currentPath, marketUnit, observations) {
-  observations.push(buildObservation(marketUnit, currentPath, value));
+function walkNode(value, currentPath, marketUnit, observations, state) {
+  const observationOrder = state.nextObservationOrder;
+  state.nextObservationOrder += 1;
+
+  observations.push(
+    buildObservation(marketUnit, currentPath, value, observationOrder)
+  );
 
   const nodeKind = getNodeKind(value);
 
@@ -41,7 +77,7 @@ function walkNode(value, currentPath, marketUnit, observations) {
       const childValue = value[key];
       const childPath = joinObjectPath(currentPath, key);
 
-      walkNode(childValue, childPath, marketUnit, observations);
+      walkNode(childValue, childPath, marketUnit, observations, state);
     }
 
     return;
@@ -51,7 +87,7 @@ function walkNode(value, currentPath, marketUnit, observations) {
     const itemPath = joinArrayItemPath(currentPath);
 
     for (const item of value) {
-      walkNode(item, itemPath, marketUnit, observations);
+      walkNode(item, itemPath, marketUnit, observations, state);
     }
   }
 }
@@ -64,7 +100,10 @@ export function extractPathObservationsFromMarketUnit(marketUnit) {
   }
 
   const observations = [];
-  walkNode(marketUnit.market, ROOT_PATH, marketUnit, observations);
+  const state = {
+    nextObservationOrder: 0,
+  };
+  walkNode(marketUnit.market, ROOT_PATH, marketUnit, observations, state);
 
   return {
     ok: true,
